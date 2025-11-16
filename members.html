@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-book-open"></i>
+            <h2>Library System</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="books.html" class="nav-item">
+                <i class="fas fa-book"></i> Books
+            </a>
+            <a href="members.html" class="nav-item active">
+                <i class="fas fa-users"></i> Members
+            </a>
+            <a href="loans.html" class="nav-item">
+                <i class="fas fa-hand-holding"></i> Loans
+            </a>
+            <a href="returns.html" class="nav-item">
+                <i class="fas fa-undo"></i> Returns
+            </a>
+            <a href="fines.html" class="nav-item">
+                <i class="fas fa-dollar-sign"></i> Fines
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Member Management</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="user-info">
+                    <span id="userName">Welcome, Admin</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Content -->
+        <div class="page-content">
+            <!-- Search and Actions -->
+            <div class="actions-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchMember" placeholder="Search by name, membership no, or email...">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="openAddMemberModal()">
+                        <i class="fas fa-user-plus"></i> Add New Member
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportMembers()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Members Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Member No</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Join Date</th>
+                            <th>Books Borrowed</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTableBody">
+                        <tr>
+                            <td>M001</td>
+                            <td>Subhadip Jana</td>
+                            <td>subhadip.jana@bwu.ac.in</td>
+                            <td>+919876543211</td>
+                            <td>2023-01-10</td>
+                            <td>5</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>
+                                <button class="btn-icon btn-view" onclick="viewMember('M001')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-icon btn-edit" onclick="editMember('M001')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteMember('M001')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>M002</td>
+                            <td>Ajay Kumar Das</td>
+                            <td>ajay.das@bwu.ac.in</td>
+                            <td>+919812345678</td>
+                            <td>2023-02-14</td>
+                            <td>3</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>
+                                <button class="btn-icon btn-view" onclick="viewMember('M002')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-icon btn-edit" onclick="editMember('M002')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteMember('M002')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>M003</td>
+                            <td>Pritam Maity</td>
+                            <td>pritam.maity@bwu.ac.in</td>
+                            <td>+919123456789</td>
+                            <td>2023-03-20</td>
+                            <td>7</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>
+                                <button class="btn-icon btn-view" onclick="viewMember('M003')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-icon btn-edit" onclick="editMember('M003')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteMember('M003')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Member Modal -->
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Member</h2>
+                <span class="close" onclick="closeMemberModal()">&times;</span>
+            </div>
+            <form id="memberForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="memberNo">Membership Number</label>
+                        <input type="text" id="memberNo" name="memberNo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberName">Full Name</label>
+                        <input type="text" id="memberName" name="memberName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="memberEmail">Email</label>
+                        <input type="email" id="memberEmail" name="memberEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPhone">Phone</label>
+                        <input type="tel" id="memberPhone" name="memberPhone" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeMemberModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="members.js"></script>
+</body>
+</html>
