@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar (Same as dashboard) -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-book-open"></i>
+            <h2>Library System</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="books.html" class="nav-item active">
+                <i class="fas fa-book"></i> Books
+            </a>
+            <a href="members.html" class="nav-item">
+                <i class="fas fa-users"></i> Members
+            </a>
+            <a href="loans.html" class="nav-item">
+                <i class="fas fa-hand-holding"></i> Loans
+            </a>
+            <a href="returns.html" class="nav-item">
+                <i class="fas fa-undo"></i> Returns
+            </a>
+            <a href="fines.html" class="nav-item">
+                <i class="fas fa-dollar-sign"></i> Fines
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Book Management</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="user-info">
+                    <span id="userName">Welcome, Admin</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Content -->
+        <div class="page-content">
+            <!-- Search and Actions -->
+            <div class="actions-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchBook" placeholder="Search by title, author, or ISBN...">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="openAddBookModal()">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportBooks()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Books Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Available</th>
+                            <th>Price</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody">
+                        <tr>
+                            <td>9780132149181</td>
+                            <td>Database System Concepts</td>
+                            <td>Abraham Silberschatz</td>
+                            <td>Database Management</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>₹650</td>
+                            <td>Shelf A1</td>
+                            <td>
+                                <button class="btn-icon btn-edit" onclick="editBook('9780132149181')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteBook('9780132149181')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>9780131103627</td>
+                            <td>Computer Networks</td>
+                            <td>Andrew S. Tanenbaum</td>
+                            <td>Networking</td>
+                            <td>4</td>
+                            <td>3</td>
+                            <td>₹720</td>
+                            <td>Shelf A2</td>
+                            <td>
+                                <button class="btn-icon btn-edit" onclick="editBook('9780131103627')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteBook('9780131103627')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>9780133594140</td>
+                            <td>Operating System Concepts</td>
+                            <td>Abraham Silberschatz</td>
+                            <td>Operating Systems</td>
+                            <td>2</td>
+                            <td>1</td>
+                            <td>₹700</td>
+                            <td>Shelf B1</td>
+                            <td>
+                                <button class="btn-icon btn-edit" onclick="editBook('9780133594140')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteBook('9780133594140')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="btn-page" onclick="previousPage()">Previous</button>
+                <span class="page-info">Page 1 of 5</span>
+                <button class="btn-page" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Book Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Book</h2>
+                <span class="close" onclick="closeBookModal()">&times;</span>
+            </div>
+            <form id="bookForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="isbn">ISBN</label>
+                        <input type="text" id="isbn" name="isbn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Database Management">Database Management</option>
+                            <option value="Networking">Networking</option>
+                            <option value="Operating Systems">Operating Systems</option>
+                            <option value="Algorithms">Algorithms</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Computer Architecture">Computer Architecture</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price (₹)</label>
+                        <input type="number" id="price" name="price" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" placeholder="e.g., Shelf A1" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeBookModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="books.js"></script>
+</body>
+</html>
