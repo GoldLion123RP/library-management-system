@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-book-open"></i>
+            <h2>Library System</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="books.html" class="nav-item">
+                <i class="fas fa-book"></i> Books
+            </a>
+            <a href="members.html" class="nav-item">
+                <i class="fas fa-users"></i> Members
+            </a>
+            <a href="loans.html" class="nav-item active">
+                <i class="fas fa-hand-holding"></i> Loans
+            </a>
+            <a href="returns.html" class="nav-item">
+                <i class="fas fa-undo"></i> Returns
+            </a>
+            <a href="fines.html" class="nav-item">
+                <i class="fas fa-dollar-sign"></i> Fines
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Issue Book</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="user-info">
+                    <span id="userName">Welcome, Admin</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Issue Book Form -->
+        <div class="page-content">
+            <div class="issue-book-container">
+                <div class="form-card">
+                    <h2><i class="fas fa-book-reader"></i> Issue New Book</h2>
+                    <form id="issueBookForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="memberSelect">Select Member</label>
+                                <select id="memberSelect" required>
+                                    <option value="">Choose a member...</option>
+                                    <option value="M001">M001 - Subhadip Jana</option>
+                                    <option value="M002">M002 - Ajay Kumar Das</option>
+                                    <option value="M003">M003 - Pritam Maity</option>
+                                    <option value="M004">M004 - Santunu Mog</option>
+                                    <option value="M005">M005 - Rahul Pal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bookSelect">Select Book</label>
+                                <select id="bookSelect" required>
+                                    <option value="">Choose a book...</option>
+                                    <option value="B001">Database System Concepts</option>
+                                    <option value="B002">Computer Networks</option>
+                                    <option value="B003">Operating System Concepts</option>
+                                    <option value="B004">Introduction to Algorithms</option>
+                                    <option value="B005">Let Us C</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="issueDate">Issue Date</label>
+                                <input type="date" id="issueDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dueDate">Due Date</label>
+                                <input type="date" id="dueDate" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Issue Book
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Active Loans -->
+                <div class="loans-table-section">
+                    <h2><i class="fas fa-list"></i> Active Loans</h2>
+                    <div class="filter-bar">
+                        <input type="text" placeholder="Search loans..." class="search-input">
+                        <select class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="issued">Issued</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Member</th>
+                                <th>Book</th>
+                                <th>Issue Date</th>
+                                <th>Due Date</th>
+                                <th>Days Left</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#L001</td>
+                                <td>Rahul Pal</td>
+                                <td>Database System Concepts</td>
+                                <td>2024-10-20</td>
+                                <td>2024-11-03</td>
+                                <td>5 days</td>
+                                <td><span class="badge badge-warning">Issued</span></td>
+                                <td>
+                                    <button class="btn-icon btn-success" onclick="returnBook('L001')">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                    <button class="btn-icon btn-primary" onclick="extendLoan('L001')">
+                                        <i class="fas fa-clock"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#L002</td>
+                                <td>Pritam Maity</td>
+                                <td>Computer Networks</td>
+                                <td>2024-10-15</td>
+                                <td>2024-10-29</td>
+                                <td class="text-danger">Overdue 2 days</td>
+                                <td><span class="badge badge-danger">Overdue</span></td>
+                                <td>
+                                    <button class="btn-icon btn-success" onclick="returnBook('L002')">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                    <button class="btn-icon btn-warning" onclick="sendReminder('L002')">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="loans.js"></script>
+</body>
+</html>
